@@ -18,9 +18,12 @@ class WirePath:
         y = self.current.y
         moves = int(length[1:])
         for n in range(1, moves + 1):
+            self.steps += 1
             dist = abs(x) + abs(y + n)
             new_coords = PathCoords(x, y + n, dist)
             self.wire_path_coords.add(new_coords)
+            if not new_coords in self.steps_taken.keys():
+                self.steps_taken[new_coords] = self.steps
         self.current = new_coords
 
     def move_down(self, length: str):
@@ -28,9 +31,12 @@ class WirePath:
         y = self.current.y
         moves = int(length[1:])
         for n in range(1, moves + 1):
+            self.steps += 1
             dist = abs(x) + abs(y - n)
             new_coords = PathCoords(x, y - n, dist)
             self.wire_path_coords.add(new_coords)
+            if not new_coords in self.steps_taken.keys():
+                self.steps_taken[new_coords] = self.steps
         self.current = new_coords
 
     def move_right(self, length: str):
@@ -38,9 +44,12 @@ class WirePath:
         y = self.current.y
         moves = int(length[1:])
         for n in range(1, moves + 1):
+            self.steps += 1
             dist = abs(x + n) + abs(y)
             new_coords = PathCoords(x + n, y, dist)
             self.wire_path_coords.add(new_coords)
+            if not new_coords in self.steps_taken.keys():
+                self.steps_taken[new_coords] = self.steps
         self.current = new_coords
 
     def move_left(self, length: str):
@@ -48,9 +57,12 @@ class WirePath:
         y = self.current.y
         moves = int(length[1:])
         for n in range(1, moves + 1):
+            self.steps += 1
             dist = abs(x - n) + abs(y)
             new_coords = PathCoords(x - n, y, dist)
             self.wire_path_coords.add(new_coords)
+            if not new_coords in self.steps_taken.keys():
+                self.steps_taken[new_coords] = self.steps
         self.current = new_coords
 
     def follow_path(self) -> set:
@@ -66,7 +78,7 @@ class WirePath:
         return self.wire_path_coords
 
 
-def crossed_wires(wire_01: list, wire_02: list) -> int:
+def crossed_wires(wire_01: list, wire_02: list, measure="manhattan") -> int:
 
     coords_wire_01 = WirePath(wire_01)
     coords_wire_02 = WirePath(wire_02)
@@ -78,6 +90,15 @@ def crossed_wires(wire_01: list, wire_02: list) -> int:
 
     closest = min(intersetion_points, key=lambda x: x.dist)
 
+    min_steps = 99999
+    for point in intersetion_points:
+        d1 = coords_wire_01.steps_taken[point]
+        d2 = coords_wire_02.steps_taken[point]
+        dist = d1 + d2
+        min_steps = dist if dist < min_steps else min_steps
+
+    print(min_steps)
+
     return closest.dist
 
 
@@ -87,4 +108,4 @@ with open("input.txt", "r") as f:
 wire_01 = lines[0].split(",")
 wire_02 = lines[1].split(",")
 
-print((crossed_wires(["R8", "U5", "L5", "D3"], ["U7", "R6", "D4", "L4"])))
+print((crossed_wires(wire_01, wire_02)))
