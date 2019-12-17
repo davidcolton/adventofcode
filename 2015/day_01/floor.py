@@ -8,8 +8,9 @@ class Floor:
         self.__floor = 0
         self.__moves = 0
 
+    @property
     def final_floor(self):
-        return f"Santa is on floor: {self.__floors_counter['('] - self.__floors_counter[')']}"
+        return self.__floors_counter["("] - self.__floors_counter[")"]
 
     def move_up_floor(self):
         self.__floor += 1
@@ -19,12 +20,13 @@ class Floor:
         self.__floor -= 1
         return self
 
+    @property
     def first_basement_visit(self):
         while self.__instructions and self.__floor >= 0:
             self.__moves += 1
             inst = self.__instructions.pop(0)
             self.move_up_floor() if inst == "(" else self.move_down_floor()
-        return f"Santa first went to the basement on move {self.__moves}"
+        return self.__moves
 
 
 with open("./input.txt", "r") as f:
@@ -32,5 +34,5 @@ with open("./input.txt", "r") as f:
 
 santa = Floor(floors)
 
-print(santa.final_floor())
-print(santa.first_basement_visit())
+print(f"Santa is on floor: {santa.final_floor}")
+print(f"Santa first went to the basement on move {santa.first_basement_visit}")
