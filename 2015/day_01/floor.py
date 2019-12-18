@@ -29,10 +29,13 @@ class Floor:
         return self.__moves
 
 
-with open("./input.txt", "r") as f:
-    floors = f.read()
+if __name__ == "__main__":
+    with open("./input.txt", "r") as f:
+        floors = f.read()
 
-santa = Floor(floors)
+    santa = Floor(floors)
 
-print(f"Santa is on floor: {santa.final_floor}")
-print(f"Santa first went to the basement on move {santa.first_basement_visit}")
+    print(f"Part 01:\nSanta is on floor: {santa.final_floor}\n")
+    print(
+        f"Part 02:\nSanta first went to the basement on move {santa.first_basement_visit}"
+    )
