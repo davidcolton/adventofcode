@@ -54,9 +54,6 @@ class ChristmasLights:
         return self.grid.sum()
 
 
-# Need to refactor to have a base ChristmasLights Class and
-#    then a ChristmasLights1 & ChristmasLights2 subclasses
-#    This will remove nearly all of the repetition
 class ChristmasLights2(ChristmasLights):
     def turn_on(self, s1, s2):
         x1, x2, y1, y2 = self.process_grid_coordinates(s1, s2)
