@@ -3,6 +3,7 @@ from collections.abc import Iterable
 
 
 def common_iterable(obj):
+    # https://stackoverflow.com/questions/12325608/iterate-over-a-dict-or-list-in-python
     if isinstance(obj, dict):
         for key in obj:
             yield key
