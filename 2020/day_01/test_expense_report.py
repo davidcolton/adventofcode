@@ -11,5 +11,5 @@ from expense_report import fix_expenses
         (99, 2, [2, 4, 6, 7, 8, 10], None),
     ],
 )
-def test_strip_url_email(target, count, report, expected):
+def test_fix_expenses(target, count, report, expected):
     assert fix_expenses(target, count, report) == expected
