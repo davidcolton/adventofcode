@@ -18,7 +18,7 @@ if __name__ == "__main__":
     # Read in the input ... always called `input`
     # Customize depending on the type of data structure required
 
-    # Day 04: A simple list
+    # Day 06: A simple list
     # Split on \n\n and then strip \n
     with open("input") as f:
         input = f.read()
