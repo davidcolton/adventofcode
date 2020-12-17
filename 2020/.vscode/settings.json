@@ -16,7 +16,8 @@
         "day_13",
         "day_14",
         "day_15",
-        "day_16"
+        "day_16",
+        "day_17"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
