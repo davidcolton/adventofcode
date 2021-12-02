@@ -13,6 +13,21 @@ def calculate_position(values):
     return position * depth
 
 
+def calculate_position_with_aim(values):
+
+    position = depth = aim = 0
+
+    for ins in values:
+        if ins[0] == 'forward':
+            depth += int(ins[1]) * aim
+            position += int(ins[1])
+        elif ins[0] == 'down':
+            aim += int(ins[1])
+        elif ins[0] == 'up':
+            aim -= int(ins[1])
+
+    return position * depth
+
 
 if __name__ == "__main__":
 
@@ -24,3 +39,4 @@ if __name__ == "__main__":
         values = [(line.strip().split()) for line in f]
 
     print(f'Position is: {calculate_position(values)}')
+    print(f'Position with aim is: {calculate_position_with_aim(values)}')
