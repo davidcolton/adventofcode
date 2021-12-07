@@ -23,7 +23,7 @@ def weighted_least_cost(data):
     results = []
 
     def f(x):
-        return sum(list(range(1, x + 1)))
+        return sum(range(1, x + 1))
 
     for n in range(min(data), max(data) + 1):
         tmp_arr = np.absolute(arr - n)
@@ -45,4 +45,4 @@ if __name__ == "__main__":
         data = [int(n) for n in values.split(",")]
 
     print(f"Part 01: {least_cost(data)}")
-    print(f"Part 01: {weighted_least_cost(data)}")
+    print(f"Part 02: {weighted_least_cost(data)}")
