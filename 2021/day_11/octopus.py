@@ -19,9 +19,7 @@ small_input = """11111
 19991
 11111"""
 
-data = [
-    [int(num) for num in block] for block in (line for line in small_input.split("\n"))
-]
+data = [[int(num) for num in block] for block in (line for line in input.split("\n"))]
 
 
 @dataclass
@@ -41,22 +39,25 @@ class OctopusGrid:
         self.MAX_B = self.arr.shape[1]
 
     def run_cycles(self):
-        for _ in range(self.cycles):
+        flashes = 0
+        for c in range(self.cycles):
             self.increase_energy()
-            self.flash()
+            this_flash = self.flash()
+            flashes += this_flash
+        return flashes
 
     def increase_energy(self, increase=1):
         self.arr += 1
 
     def flash(self):
 
-        while (self.arr >= 9).sum():
+        while (self.arr > 9).sum():
             # The list of points that are greater that or equal to 9
-            nines = list(np.transpose((self.arr >= 9).nonzero()))
+            nines = list(np.transpose((self.arr > 9).nonzero()))
 
             # Create a zero array with the nine locations blocked out
             zero_arr = np.zeros([self.MAX_A, self.MAX_B])
-            zero_arr[self.arr >= 9] = np.nan
+            zero_arr[self.arr > 9] = np.nan
 
             # For each location that was a nine, increment neighbours
             for n in nines:
@@ -64,11 +65,19 @@ class OctopusGrid:
                 zero_arr[a1:a2, b1:b2] += 1
 
             # Reset octopuses that flashed
-            self.arr[self.arr >= 9] = 0
+            self.arr[self.arr > 9] = np.nan
 
             # Add the result of the flashed
             zero_arr[np.isnan(zero_arr)] = 0
             self.arr += zero_arr.astype(int)
+
+        # Count the number of flashed octopus
+        flashed = np.count_nonzero(np.isnan(self.arr))
+
+        # Reset flashed octopus to zero
+        self.arr[np.isnan(self.arr)] = 0
+
+        return flashed
 
     def get_boundaries(self, n):
         a, b = n
@@ -85,16 +94,17 @@ if __name__ == "__main__":
     # Read in the input ... always called `input`
     # Customize depending on the type of data structure required
 
-    """with open("input") as f:
-        input = f.read()
+    with open("input") as f:
+        f_input = f.read()
 
-    data = [
-        [int(num) for num in block] for block in (line for line in input.split("\n"))
-    ]"""
+    f_data = [
+        [int(num) for num in block] for block in (line for line in f_input.split("\n"))
+    ]
 
-    arr = np.array(data).astype(int)
+    arr = np.array(f_data).astype(float)
 
-    grid = OctopusGrid(arr, cycles=1)
-    print(grid.arr)
-    grid.run_cycles()
-    print(grid.arr)
+    grid = OctopusGrid(arr, cycles=100)
+    print(f"PART 01: {grid.run_cycles()}")
+
+    grid = OctopusGrid(arr, cycles=250)
+    print(grid.run_cycles())
