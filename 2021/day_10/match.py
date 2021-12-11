@@ -8,27 +8,26 @@ error_values = {
     '>': 25137
 }
 
-"""input = '''[({(<(())[]>[[{[]{<()<>>
-[(()[<>])]({[<{<<[]>>(
-{([(<{}[<>[]}>{[]{[(<()>
-(((({<>}<{<{<>}{[]{[]{}
-[[<[([]))<([[{}[[()]]]
-[{[{({}]{}}([{[{{{}}([]
-{<[[]]>}<{[{[{[]{()[[[]
-[<(<(<(<{}))><([]([]()
-<{([([[(<>()){}]>(<<{{
-<{([{{}}[<[[[<>{}]]]>[]]'''"""
+incomplete_values = {
+    ')': 1,
+    ']': 2,
+    '}': 3,
+    '>': 4
+}
 
-def find_parentheses(input):
+
+def find_parentheses(input, corrupt=True):
     # The indexes of the open parentheses are stored in a stack, implemented
     # as a list
 
     errors = []
-
-    o_stack = []
-    c_stack = []
+    incomplete_stacks = []
 
     for s in input.split('\n'):
+
+        o_stack = []
+        c_stack = []
+
         for i, c in enumerate(s.strip()):
             if c in opening_braces:
                 o_stack.append(i)
@@ -41,9 +40,37 @@ def find_parentheses(input):
                     c_stack = c_stack[:-1]
                 else:
                     errors.append(c)
+                    c_stack = []
                     break
         
-    return sum(error_values[k] for k in errors)
+        incomplete_stacks.append(c_stack)
+        
+    if corrupt:
+        return sum(error_values[k] for k in errors)
+    else:
+        return incomplete_stacks
+
+def calculate_incomplete_score(input):
+
+    stacks = find_parentheses(input, corrupt=False)
+    stacks = [s for s in stacks if len(s)]
+
+    results = []
+
+    for s in stacks:
+        res = 0
+        s = s[::-1]
+        for b in s:
+            res = res * 5
+            res = res + incomplete_values[b]
+
+        results.append(res)
+
+    results.sort()
+
+    middle = int((len(results) - 1) / 2)
+
+    return results[middle]
 
 
 
@@ -57,6 +84,5 @@ if __name__ == "__main__":
         input = f.read()
 
     print(f'Part 01: {find_parentheses(input)}')
-
-
+    print(f'Part 01: {calculate_incomplete_score(input)}')
 
