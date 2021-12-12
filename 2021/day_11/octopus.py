@@ -44,6 +44,8 @@ class OctopusGrid:
             self.increase_energy()
             this_flash = self.flash()
             flashes += this_flash
+            if np.all((self.arr == 0)):
+                print(c)
         return flashes
 
     def increase_energy(self, increase=1):
@@ -106,5 +108,5 @@ if __name__ == "__main__":
     grid = OctopusGrid(arr, cycles=100)
     print(f"PART 01: {grid.run_cycles()}")
 
-    grid = OctopusGrid(arr, cycles=250)
-    print(grid.run_cycles())
+    grid_02 = OctopusGrid(arr, cycles=250)
+    print(grid_02.run_cycles())
